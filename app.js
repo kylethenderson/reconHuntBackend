@@ -11,7 +11,7 @@ const debugMode = NODE_ENV === 'debug';
 // REQUIRE ALL THE LIBS!
 const express = require('express');
 const mongoose = require('mongoose');
-const uuidv1 = require('uuid/v1');
+const { v1: uuidv1 } = require('uuid');
 
 // init the libs
 const app = express();

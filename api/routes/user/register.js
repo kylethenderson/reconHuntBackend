@@ -1,12 +1,12 @@
 const router = require('express').Router();
-const uuidv1 = require('uuid/v1');
+const { v1: uuidv1 } = require('uuid');
 const bcrypt = require('bcryptjs');
 
 // import models
-const User = require('../models/user');
-const UserAuth = require('../models/auth');
+const User = require('../../../models/user');
+const UserAuth = require('../../../models/auth');
 
-const { registrationValidation, userValidation } = require('../scripts/validations');
+const { registrationValidation, userValidation } = require('../../../scripts/validations');
 
 // routes
 router.get('/', (req, res) => {
