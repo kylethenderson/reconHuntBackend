@@ -17,7 +17,7 @@ const uuidv1 = require('uuid/v1');
 const app = express();
 
 // import routes
-const authRouter = require('./api/index')
+const apiRouter = require('./api/index')
 
 // //////////////////////
 // GENERAL MIDDLEWARE ///
@@ -47,7 +47,7 @@ app.use((req, res, next) => {
 // ROUTES ///
 // //////////
 
-app.use('/api/user', authRouter);
+app.use('/api', apiRouter);
 
 // ///////////////
 // INIT SERVER ///
