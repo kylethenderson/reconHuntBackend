@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken')
+const moment = require('moment');
 
 const UserAuth = require('../../../models/auth');
 const { TOKEN_SECRET } = process.env;
@@ -37,6 +38,9 @@ router.post('/', async (req, res) => {
         id: user.uuid,
         username: user.username,
     }
+
+    // set jwt expiration
+
 
     // create token
     const token = jwt.sign(tokenData, TOKEN_SECRET);
