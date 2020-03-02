@@ -22,7 +22,9 @@ const userSchema = new Schema({
     uuid: {
         type: String,
         required: true,
-    }
+    },
+    permissions: Object,
+    refreshToken: Object
 },
     { timestamps: true });
 

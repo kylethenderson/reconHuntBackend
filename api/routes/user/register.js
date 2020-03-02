@@ -73,12 +73,12 @@ router.post('/', async (req, res) => {
     try {
         await User.create(user);
         return res.status(201).json({
-            message: 'User created',
+            message: 'Registration complete',
         })
 
     } catch (error) {
         return res.status(400).send({
-            message: 'Error saving user',
+            message: 'Error creating registration',
             error: error,
         })
     }

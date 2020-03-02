@@ -3,8 +3,10 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken')
 const moment = require('moment');
 
+const createTokens = require('../../../scripts/createTokens');
 const UserAuth = require('../../../models/auth');
-const { TOKEN_SECRET } = process.env;
+const User = require('../../../models/auth');
+const { TOKEN_SECRET, REFRESH_TOKEN_SECRET } = process.env;
 const { loginValidation } = require('../../../scripts/validations')
 
 router.get('/', (req, res) => {
@@ -23,13 +25,15 @@ router.post('/', async (req, res) => {
     // ensure user is in collection
     const user = await UserAuth.findOne({ username: body.username })
     if (!user) return res.status(400).json({
-        message: 'User not found',
+        message: 'Invalid username or password',
+        code: 'INVALIDCREDS'
     });
 
     // validate password
     const validPass = await bcrypt.compare(body.password, user.password);
     if (!validPass) return res.status(400).json({
-        message: 'Invalid password',
+        message: 'Invalid username or password',
+        code: 'INVALIDCREDS'
     });
 
     // prep data to be included in token
@@ -38,14 +42,18 @@ router.post('/', async (req, res) => {
         id: user.uuid,
         username: user.username,
     }
+    const { token, newRefreshToken } = createTokens(tokenData);
 
-    // set jwt expiration
+    // update user object with refreshToken
+    await User.updateOne(
+        { uuid: user.uuid },
+        { refreshToken }
+    );
 
-
-    // create token
-    const token = jwt.sign(tokenData, TOKEN_SECRET);
-
-    res.header('auth-token', token).status(200).json('Login successful');
+    res.status(200).json({
+        token,
+        newRefreshToken
+    });
 
 })
 
