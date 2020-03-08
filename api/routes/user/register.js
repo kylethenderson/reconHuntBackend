@@ -6,7 +6,7 @@ const bcrypt = require('bcryptjs');
 const User = require('../../../models/user');
 const UserAuth = require('../../../models/auth');
 
-const { registrationValidation, userValidation } = require('../../../scripts/validations');
+const { registrationValidation, userValidation, authValidation } = require('../../../scripts/validations');
 
 // routes
 router.get('/', (req, res) => {
@@ -16,12 +16,25 @@ router.get('/', (req, res) => {
 // register route - creates documents in auth collection and user collection
 router.post('/', async (req, res) => {
     const { body } = req;
+    const { error: bodyError } = registrationValidation.validate(body);
+    if (bodyError) return res.status(400).send({
+        message: bodyError.details[0].message
+    })
+    console.log(body);
+
 
     // ensure username isn't already used
     const usernameExists = await UserAuth.findOne({ username: body.username })
-    if (usernameExists) return res.status(409).json({
+    if (usernameExists) return res.status(409).send({
         message: 'Username unavailable',
         code: 'USEREXISTS',
+    })
+
+    //ensure email isn't already used
+    const emailExists = User.findOne({ email: body.email })
+    if (emailExists) return res.status(409).send({
+        message: 'Email in use',
+        code: 'EMAILEXISTS',
     })
 
     // hash password
@@ -39,7 +52,7 @@ router.post('/', async (req, res) => {
     };
 
     // validate user auth data
-    const { error: authError } = registrationValidation.validate(userAuth);
+    const { error: authError } = authValidation.validate(userAuth);
     if (authError) return res.status(400).send({
         message: authError.details[0].message
     });
@@ -72,7 +85,7 @@ router.post('/', async (req, res) => {
     // save new user object
     try {
         await User.create(user);
-        return res.status(201).json({
+        return res.status(201).send({
             message: 'Registration complete',
         })
 

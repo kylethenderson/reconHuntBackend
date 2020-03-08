@@ -42,7 +42,7 @@ router.post('/', async (req, res) => {
         id: user.uuid,
         username: user.username,
     }
-    const { token, newRefreshToken } = createTokens(tokenData);
+    const { token, refreshToken } = createTokens(tokenData);
 
     // update user object with refreshToken
     await User.updateOne(
@@ -52,7 +52,7 @@ router.post('/', async (req, res) => {
 
     res.status(200).json({
         token,
-        newRefreshToken
+        refreshToken
     });
 
 })
