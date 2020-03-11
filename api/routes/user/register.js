@@ -20,8 +20,6 @@ router.post('/', async (req, res) => {
     if (bodyError) return res.status(400).send({
         message: bodyError.details[0].message
     })
-    console.log(body);
-
 
     // ensure username isn't already used
     const usernameExists = await UserAuth.findOne({ username: body.username })

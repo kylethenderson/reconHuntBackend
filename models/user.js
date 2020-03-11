@@ -24,7 +24,8 @@ const userSchema = new Schema({
         required: true,
     },
     permissions: Object,
-    refreshToken: Object
+    refreshToken: String,
+    lastLogin: Date
 },
     { timestamps: true });
 

@@ -5,7 +5,7 @@ const moment = require('moment');
 
 const createTokens = require('../../../scripts/createTokens');
 const UserAuth = require('../../../models/auth');
-const User = require('../../../models/auth');
+const User = require('../../../models/user');
 const { TOKEN_SECRET, REFRESH_TOKEN_SECRET } = process.env;
 const { loginValidation } = require('../../../scripts/validations')
 
@@ -22,7 +22,7 @@ router.post('/', async (req, res) => {
         message: error.details[0].message,
     })
 
-    // ensure user is in collection
+    // ensure user is in auth collection
     const user = await UserAuth.findOne({ username: body.username })
     if (!user) return res.status(400).json({
         message: 'Invalid username or password',
@@ -47,7 +47,13 @@ router.post('/', async (req, res) => {
     // update user object with refreshToken
     await User.updateOne(
         { uuid: user.uuid },
-        { refreshToken }
+        {
+            refreshToken,
+            lastLogin: new Date()
+        },
+        {
+            upsert: true
+        }
     );
 
     res.status(200).json({
