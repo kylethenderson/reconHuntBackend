@@ -36,10 +36,15 @@ router.post('/', async (req, res) => {
         code: 'INVALIDCREDS'
     });
 
+    // username and pass verified, lets get some more data
+    const userData = await User.findOne({ uuid: user.uuid },
+        { _id: 0, firstName: 1, lastName: 1, email: 1, phone: 1 });
+
     // prep data to be included in token
     // console.log(user);
     const tokenData = {
         id: user.uuid,
+        user: userData,
         username: user.username,
     }
     const { token, refreshToken } = createTokens(tokenData);

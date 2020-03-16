@@ -4,7 +4,8 @@ const { TOKEN_SECRET } = process.env;
 
 const verifyToken = (req, res, next) => {
     const authHeader = req.headers.authorization;
-    // if there's no auth, give 'em the boot!
+
+    // if there's no authorization header, give 'em the boot!
     if (!authHeader) return res.status(401).json({
         message: 'Access denied',
     })
@@ -25,7 +26,7 @@ const verifyToken = (req, res, next) => {
         next();
     } catch (error) {
         res.status(400).json({
-            message: 'Invalid token'
+            message: 'Invalid token',
         })
     }
 }
