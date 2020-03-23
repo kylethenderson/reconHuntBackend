@@ -17,7 +17,6 @@ router.post('/', async (req, res) => {
 
     // does the user in the token exist?
     const userObject = await User.findOne({ uuid: verifiedToken.id });
-    console.log(userObject);
     if (checkToken !== userObject.refreshToken) return res.sendStatus(403);
 
     // refreshToken verified, pare down the data

@@ -49,6 +49,13 @@ app.use((req, res, next) => {
 
 app.use('/api', apiRouter);
 
+const { createPosts } = require('./scripts/createDummyData');
+
+app.post('/mockData/createPosts', async (req, res) => {
+    await createPosts();
+    res.sendStatus(201);
+})
+
 // ///////////////
 // INIT SERVER ///
 // ///////////////
