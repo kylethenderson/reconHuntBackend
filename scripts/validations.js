@@ -33,23 +33,15 @@ const postAvailableValidation = Joi.object({
     from: Joi.date().required(),
 })
 
-const postCategoryValidation = Joi.object({
-    deer: Joi.object().required(),
-    upland: Joi.object().required(),
-    turkey: Joi.object().required(),
-    varmint: Joi.object().required(),
-});
-
 const postValidation = Joi.object({
     title: Joi.string().required(),
     area: Joi.string().required(),
     description: Joi.string().required(),
     available: postAvailableValidation,
-    category: postCategoryValidation,
-    createdBy: Joi.string().required(),
+    category: Joi.array().items(Joi.string()).required(),
     price: Joi.string().required(),
     huntableAcres: Joi.string().required(),
-    uuid: Joi.string().required(),
+    deerMethods: Joi.array(),
 })
 
 module.exports = { registrationValidation, authValidation, userValidation, loginValidation, postValidation };

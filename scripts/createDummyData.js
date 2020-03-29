@@ -20,7 +20,7 @@ const createPosts = async () => {
 			category: {
 				deer: {
 					allowed: true,
-					weapon: ['bow', 'rifle']
+					methods: ['bow', 'rifle']
 				},
 				upland: {
 					allowed: true,

@@ -21,78 +21,74 @@ router.post('/', async (req, res) => {
         message: bodyError.details[0].message
     })
 
-    // ensure username isn't already used
-    const usernameExists = await UserAuth.findOne({ username: body.username })
-    if (usernameExists) return res.status(409).send({
-        message: 'Username unavailable',
-        code: 'USEREXISTS',
-    })
-
-    //ensure email isn't already used
-    const emailExists = User.findOne({ email: body.email })
-    if (emailExists) return res.status(409).send({
-        message: 'Email in use',
-        code: 'EMAILEXISTS',
-    })
-
-    // hash password
-    const salt = await bcrypt.genSalt();
-    const hashedPassword = await bcrypt.hash(body.password, salt);
-
-    // create user uuid
-    const uuid = uuidv1();
-
-    // create auth object to save
-    const userAuth = {
-        username: body.username,
-        password: hashedPassword,
-        uuid,
-    };
-
-    // validate user auth data
-    const { error: authError } = authValidation.validate(userAuth);
-    if (authError) return res.status(400).send({
-        message: authError.details[0].message
-    });
-
-    // save auth object into auth collection
     try {
-        await UserAuth.create(userAuth);
-    } catch (error) {
-        return res.status(400).send({
-            message: 'Error saving user auth',
-            error: error,
+
+        // ensure username isn't already used
+        const usernameExists = await UserAuth.findOne({ username: body.username })
+        if (usernameExists) return res.status(409).send({
+            message: 'Username unavailable',
+            code: 'USEREXISTS',
         })
-    }
 
-    // create user object to save
-    const user = {
-        firstName: body.firstName,
-        lastName: body.lastName,
-        email: body.email,
-        phone: body.phone && body.phone,
-        uuid,
-    };
+        //ensure email isn't already used
+        const emailExists = User.findOne({ email: body.email })
+        if (emailExists) return res.status(409).send({
+            message: 'Email in use',
+            code: 'EMAILEXISTS',
+        })
 
-    // validate user object data
-    const { error: userError } = userValidation.validate(user);
-    if (userError) return res.status(400).send({
-        message: userError.details[0].message
-    });
+        // hash password
+        const salt = await bcrypt.genSalt();
+        const hashedPassword = await bcrypt.hash(body.password, salt);
 
-    // save new user object
-    try {
+        // create user uuid
+        const uuid = uuidv1();
+
+        // create auth object to save
+        const userAuth = {
+            username: body.username,
+            password: hashedPassword,
+            uuid,
+        };
+
+        // validate user auth data
+        const { error: authError } = authValidation.validate(userAuth);
+        if (authError) return res.status(400).send({
+            message: authError.details[0].message
+        });
+
+        // save auth object into auth collection
+        await UserAuth.create(userAuth);
+
+        // create user object to save
+        const user = {
+            firstName: body.firstName,
+            lastName: body.lastName,
+            email: body.email,
+            phone: body.phone && body.phone,
+            uuid,
+        };
+
+        // validate user object data
+        const { error: userError } = userValidation.validate(user);
+        if (userError) return res.status(400).send({
+            message: userError.details[0].message
+        });
+
+        // save new user object
         await User.create(user);
+
         return res.status(201).send({
             message: 'Registration complete',
         })
-
     } catch (error) {
-        return res.status(400).send({
+        console.log('Error registering user', error);
+        return res.status(500).json({
             message: 'Error creating registration',
-            error: error,
+            code: 'REGISTERERROR'
         })
     }
+
 })
 
 module.exports = router;
