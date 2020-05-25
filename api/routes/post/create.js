@@ -35,14 +35,12 @@ router.post('/', async (req, res) => {
         createdBy: req.user.uuid
     }
 
-    const categories = ["deer", "upland", "turkey", "varmint"];
+    const categories = ["deer", "upland", "turkey", "varmint", 'waterFowl'];
 
     categories.forEach(category => {
         if (req.body.category.includes(category)) newPost.category[category].allowed = true;
         else newPost.category[category].allowed = false;
     })
-
-    console.log(newPost);
 
     try {
         await Post.create(newPost)

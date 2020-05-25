@@ -7,6 +7,7 @@ const registrationValidation = Joi.object({
     email: Joi.string().required().email(),
     phone: Joi.string().required(),
     password: Joi.string().required(),
+    disclaimer: Joi.object().required(),    
 });
 
 const authValidation = Joi.object({

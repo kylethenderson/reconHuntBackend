@@ -14,7 +14,6 @@ router.post('/', async (req, res) => {
     try {
         // is it a valid token?
         const verifiedToken = jwt.verify(checkToken, REFRESH_TOKEN_SECRET);
-        if (!verifiedToken) return res.sendStatus(403);
 
         // does the user in the token exist?
         const userObject = await User.findOne({ uuid: verifiedToken.uuid });
@@ -48,6 +47,13 @@ router.post('/', async (req, res) => {
 
     } catch (error) {
         console.log('Error in refresh token', error);
+        // if client had a token but its expired, send that error to client
+        if (error.name === 'TokenExpiredError') {
+            return res.status(412).json({
+                message: error.message,
+                code: 'JWTEXPIRE'
+            })
+        }
         return res.status(500).json({
             message: 'Error in refresh token',
             code: 'RTERROR'

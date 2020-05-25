@@ -23,6 +23,10 @@ const userSchema = new Schema({
         type: String,
         required: true,
     },
+    disclaimer: {
+        type: Object,
+        required: true
+    },
     permissions: Object,
     refreshToken: String,
     lastLogin: Date

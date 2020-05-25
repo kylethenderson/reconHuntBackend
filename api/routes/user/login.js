@@ -1,11 +1,13 @@
 const router = require('express').Router();
 const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken')
+const jwt = require('jsonwebtoken');
 const moment = require('moment');
+const { v1: uuid } = require('uuid');
 
 const createTokens = require('../../../scripts/createTokens');
 const UserAuth = require('../../../models/auth');
 const User = require('../../../models/user');
+const Log = require('../../../models/log')
 const { TOKEN_SECRET, REFRESH_TOKEN_SECRET } = process.env;
 const { loginValidation } = require('../../../scripts/validations')
 
@@ -61,6 +63,18 @@ router.post('/', async (req, res) => {
                 upsert: true
             }
         );
+
+        // log the login event
+        log = {
+            event: 'login',
+            data: {
+                ...userData,
+                uuid: user.uuid,
+            },
+            uuid: uuid(),
+        };
+
+        await Log.create(log);
 
         res.status(200).json({
             token,

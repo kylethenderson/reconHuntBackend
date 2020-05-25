@@ -1,6 +1,8 @@
 const router = require('express').Router();
-const User = require('../../../models/user')
+const User = require('../../../models/user');
+const Log = require('../../../models/log')
 
+const { v1: uuid } = require('uuid');
 
 router.get('/', (req, res) => {
     res.status(200).json('logout route')
@@ -23,6 +25,19 @@ router.post('/', async (req, res) => {
             { $unset: { refreshToken: '' } },
             { upsert: true }
         )
+
+        // log the logout event
+        log = {
+            event: 'logout',
+            data: {
+                user,
+                uuid: req.user.uuid,
+            },
+            uuid: uuid(),
+        };
+
+        await Log.create(log);
+
         res.sendStatus(200);
     } catch (error) {
         console.log('Error logging out', error);
