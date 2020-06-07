@@ -12,17 +12,17 @@ router.post('/', async (req, res) => {
     if (!checkToken) return res.sendStatus(401);
 
     try {
-        // is it a valid token?
-        const verifiedToken = jwt.verify(checkToken, REFRESH_TOKEN_SECRET);
+        // decode the token
+        const decodedToken = jwt.verify(checkToken, REFRESH_TOKEN_SECRET);
 
         // does the user in the token exist?
-        const userObject = await User.findOne({ uuid: verifiedToken.uuid });
+        const userObject = await User.findOne({ uuid: decodedToken.uuid });
         if (checkToken !== userObject.refreshToken) return res.sendStatus(403);
 
         // refreshToken verified, pare down the data
         userData = { _id: userObject._id, firstName: userObject.firstName, lastName: userObject.lastName, email: userObject.email, phone: userObject.phone };
 
-        // prep data to be included in token
+        // prep data to be included in new tokens
         // console.log(user);
         const tokenData = {
             uuid: userObject.uuid,
@@ -31,7 +31,7 @@ router.post('/', async (req, res) => {
         }
         const { token, refreshToken } = createTokens(tokenData);
 
-        // update user object with refreshToken
+        // update user object with new refreshToken
         await User.updateOne(
             { uuid: userObject.uuid },
             {

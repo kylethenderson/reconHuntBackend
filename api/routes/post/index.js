@@ -1,5 +1,7 @@
 const router = require('express').Router();
 const verifyToken = require('../../../scripts/verifyToken')
+
+// routes
 const createPost = require('./create');
 const listPost = require('./list')
 const viewSingle = require('./viewSingle')

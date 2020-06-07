@@ -1,48 +1,50 @@
-const Joi = require('@hapi/joi');
+const joi = require('@hapi/joi');
 
-const registrationValidation = Joi.object({
-    firstName: Joi.string().required(),
-    lastName: Joi.string().required(),
-    username: Joi.string().required(),
-    email: Joi.string().required().email(),
-    phone: Joi.string().required(),
-    password: Joi.string().required(),
-    disclaimer: Joi.object().required(),    
+const registrationValidation = joi.object({
+    firstName: joi.string().required(),
+    lastName: joi.string().required(),
+    username: joi.string().required(),
+    email: joi.string().required().email(),
+    phone: joi.string().required(),
+    password: joi.string().required(),
+    disclaimer: joi.object().required(),
 });
 
-const authValidation = Joi.object({
-    username: Joi.string().required(),
-    password: Joi.string().required(),
-    uuid: Joi.string().required(),
+const authValidation = joi.object({
+    username: joi.string().required(),
+    password: joi.string().required(),
+    uuid: joi.string().required(),
 });
 
-const userValidation = Joi.object({
-    firstName: Joi.string().required(),
-    lastName: Joi.string().required(),
-    email: Joi.string().required().email(),
-    phone: Joi.string().required(),
-    uuid: Joi.string().required(),
+const userValidation = joi.object({
+    firstName: joi.string().required(),
+    lastName: joi.string().required(),
+    email: joi.string().required().email(),
+    phone: joi.string().required(),
+    uuid: joi.string().required(),
 });
 
-const loginValidation = Joi.object({
-    username: Joi.string().required(),
-    password: Joi.string().required(),
+const loginValidation = joi.object({
+    username: joi.string().required(),
+    password: joi.string().required(),
 });
 
-const postAvailableValidation = Joi.object({
-    to: Joi.date().required(),
-    from: Joi.date().required(),
+const postAvailableValidation = joi.object({
+    to: joi.date().required(),
+    from: joi.date().required(),
 })
 
-const postValidation = Joi.object({
-    title: Joi.string().required(),
-    area: Joi.string().required(),
-    description: Joi.string().required(),
+const postValidation = joi.object({
+    title: joi.string().required(),
+    city: joi.string(),
+    state: joi.string().required(),
+    region: joi.string().required(),
+    description: joi.string().required(),
     available: postAvailableValidation,
-    category: Joi.array().items(Joi.string()).required(),
-    price: Joi.string().required(),
-    huntableAcres: Joi.string().required(),
-    deerMethods: Joi.array(),
+    category: joi.array().items(joi.string()).required(),
+    price: joi.string().required(),
+    huntableAcres: joi.string().required(),
+    deerMethods: joi.array(),
 })
 
 module.exports = { registrationValidation, authValidation, userValidation, loginValidation, postValidation };

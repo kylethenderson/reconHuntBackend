@@ -12,7 +12,9 @@ const createPosts = async () => {
 				This needs to be of sufficient length to be able to appropriately mock up the front end.
 				It should probably be about 4 sentences long to test. Most should probably be shorter than this.
 				But it's possible that someone might write a long paragraph about their property.`,
-			area: 'Minneapolis, MN',
+			city: 'Minneapolis',
+			state: 'MN',
+			region: 'cen',
 			available: {
 				from: 'Sat Mar 21 2020 17:28:53 GMT-0700',
 				to: 'Sat Mar 28 2020 17:28:53 GMT-0700'
@@ -30,12 +32,22 @@ const createPosts = async () => {
 				},
 				varmint: {
 					allowed: false,
+				},
+				waterFowl: {
+					allowed: false,
+				},
+				fish: {
+					allowed: false,
+				},
+				guidedHunt: {
+					allowed: false,
 				}
 			},
 			createdBy: 'username',
 			createdOn: '3/15/2020',
 			price: '250',
 			huntableAcres: '100',
+			documents: [],
 			uuid,
 		}
 
