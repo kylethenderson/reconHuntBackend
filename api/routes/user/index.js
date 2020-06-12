@@ -7,6 +7,7 @@ const logoutRoute = require('./logout');
 const registerRoute = require('./register');
 const resetPasswordRoute = require('./resetPassword');
 const refreshTokenRoute = require('./refreshToken');
+const userSettingRoute = require('./userSettings');
 
 // server health check
 router.get('/', (req, res) => {
@@ -18,5 +19,6 @@ router.use('/logout', verifyToken, logoutRoute)
 router.use('/register', registerRoute)
 router.use('/resetPassword', resetPasswordRoute)
 router.use('/refreshToken', refreshTokenRoute)
+router.use('/settings', verifyToken, userSettingRoute )
 
 module.exports = router;

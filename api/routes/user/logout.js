@@ -13,7 +13,7 @@ router.post('/', async (req, res) => {
     try {
         // ensure there's the user in question
         // if not, don't break, just return
-        const user = await User.findOne({ uuid: req.user.id });
+        const user = await User.findOne({ uuid: req.jwt.id });
 
         if (!user) return res.status(200).json({
             message: 'user not found'
@@ -21,7 +21,7 @@ router.post('/', async (req, res) => {
 
         // clear the refresh token from user db
         await User.updateOne(
-            { uuid: req.user.id },
+            { uuid: req.jwt.id },
             { $unset: { refreshToken: '' } },
             { upsert: true }
         )
@@ -31,7 +31,7 @@ router.post('/', async (req, res) => {
             event: 'logout',
             data: {
                 user,
-                uuid: req.user.uuid,
+                uuid: req.jwt.uuid,
             },
             uuid: uuid(),
         };

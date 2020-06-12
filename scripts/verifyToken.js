@@ -17,8 +17,8 @@ const verifyToken = (req, res, next) => {
     })
     // oh, cool, you got a token, lets verify it
     try {
-        const user = jwt.verify(token, secret);
-        req.user = user;
+        const verifiedJwt = jwt.verify(token, secret);
+        req.jwt = verifiedJwt;
         next();
     } catch (error) {
         console.log(error);

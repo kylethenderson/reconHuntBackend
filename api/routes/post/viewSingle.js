@@ -5,7 +5,7 @@ const Log = require('../../../models/log');
 const { v1: uuid } = require('uuid');
 
 router.get('/', async (req, res) => {
-	console.log(req.query.id, req.user)
+	console.log(req.query.id, req.jwt)
 	try {
 		const post = await Post.find({ uuid: req.query.id });
 		if (!post.length) throw new Error();
@@ -16,8 +16,8 @@ router.get('/', async (req, res) => {
 			data: {
 				postId: req.query.id,
 				user: {
-					...req.user.user,
-					uuid: req.user.uuid
+					...req.jwt.user,
+					uuid: req.jwt.uuid
 				}
 			},
 			uuid: uuid(),

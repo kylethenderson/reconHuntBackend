@@ -9,7 +9,7 @@ router.get('/', (req, res) => {
 })
 
 router.post('/', async (req, res) => {
-    console.log(req.user, req.body);
+    console.log(req.jwt, req.body);
 
     const { error } = postValidation.validate(req.body);
     if (error) {
@@ -45,7 +45,7 @@ router.post('/', async (req, res) => {
             },
             price: req.body.price,
             huntableAcres: req.body.huntableAcres,
-            createdBy: req.user.uuid
+            createdBy: req.jwt.uuid
         }
 
         categories.forEach(category => {
