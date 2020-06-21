@@ -1,7 +1,4 @@
-const router = require('express').Router();
 const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
-const moment = require('moment');
 const { v1: uuid } = require('uuid');
 
 const createTokens = require('../../../scripts/createTokens');
@@ -11,11 +8,7 @@ const Log = require('../../../models/log')
 const { TOKEN_SECRET, REFRESH_TOKEN_SECRET } = process.env;
 const { loginValidation } = require('../../../scripts/validations')
 
-router.get('/', (req, res) => {
-    res.status(200).json('login route')
-})
-
-router.post('/', async (req, res) => {
+const login = async (req, res) => {
     const { body } = req;
 
     try {
@@ -26,14 +19,21 @@ router.post('/', async (req, res) => {
         })
 
         // ensure user is in auth collection
-        const user = await UserAuth.findOne({ username: body.username })
+        const user = await User.findOne({ username: body.username })
+        if (!user) return res.status(400).json({
+            message: 'Invalid username or password',
+            code: 'INVALIDCREDS'
+        });
+
+        // use user.uuid to get auth creds
+        const auth = await UserAuth.findOne({ uuid: user.uuid })
         if (!user) return res.status(400).json({
             message: 'Invalid username or password',
             code: 'INVALIDCREDS'
         });
 
         // validate password
-        const validPass = await bcrypt.compare(body.password, user.password);
+        const validPass = await bcrypt.compare(body.password, auth.password);
         if (!validPass) return res.status(400).json({
             message: 'Invalid username or password',
             code: 'INVALIDCREDS'
@@ -41,7 +41,7 @@ router.post('/', async (req, res) => {
 
         // username and pass verified, lets get some more data
         const userData = await User.findOne({ uuid: user.uuid },
-            { _id: 0, firstName: 1, lastName: 1, email: 1, phone: 1 });
+            { _id: 0, firstName: 1, lastName: 1, email: 1, phone: 1, emailNotifications: 1 });
 
         // prep data to be included in token
         // console.log(user);
@@ -89,6 +89,6 @@ router.post('/', async (req, res) => {
     }
 
 
-})
+};
 
-module.exports = router;
+module.exports = login;

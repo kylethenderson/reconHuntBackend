@@ -7,20 +7,21 @@ const registrationValidation = joi.object({
     email: joi.string().required().email(),
     phone: joi.string().required(),
     password: joi.string().required(),
-    disclaimer: joi.object().required(),
 });
 
 const authValidation = joi.object({
-    username: joi.string().required(),
     password: joi.string().required(),
     uuid: joi.string().required(),
 });
 
 const userValidation = joi.object({
+    username: joi.string().required(),
     firstName: joi.string().required(),
     lastName: joi.string().required(),
     email: joi.string().required().email(),
     phone: joi.string().required(),
+    disclaimer: joi.object().required(),
+    emailNotifications: joi.boolean().required(),
     uuid: joi.string().required(),
 });
 

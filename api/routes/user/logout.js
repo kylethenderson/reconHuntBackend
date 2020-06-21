@@ -1,14 +1,9 @@
-const router = require('express').Router();
 const User = require('../../../models/user');
 const Log = require('../../../models/log')
 
 const { v1: uuid } = require('uuid');
 
-router.get('/', (req, res) => {
-    res.status(200).json('logout route')
-});
-
-router.post('/', async (req, res) => {
+const logout = async (req, res) => {
 
     try {
         // ensure there's the user in question
@@ -47,6 +42,6 @@ router.post('/', async (req, res) => {
         })
     }
 
-})
+};
 
-module.exports = router;
+module.exports = logout;

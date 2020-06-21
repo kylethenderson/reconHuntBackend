@@ -1,9 +1,8 @@
 const router = require('express').Router();
-const verifyToken = require('../../../scripts/verifyToken');
 
-// routes
-const getCategories = require('./categories');
+// import functions
+const getCategories = require('./getCategories');
 
-router.use('/categories', verifyToken, getCategories)
-
-module.exports = router;
+module.exports = {
+	getCategories
+};

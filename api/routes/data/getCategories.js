@@ -1,8 +1,6 @@
-const router = require('express').Router();
-
 const Category = require('../../../models/category')
 
-router.get('/', async (req, res) => {
+const getCategories = async (req, res, nexte) => {
 	try {
 		const response = await Category.find({});
 
@@ -11,6 +9,6 @@ router.get('/', async (req, res) => {
 		console.log(error);
 		res.sendStatus(500);
 	}
-});
+};
 
-module.exports = router;
+module.exports = getCategories;

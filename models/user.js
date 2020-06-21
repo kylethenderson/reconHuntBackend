@@ -3,6 +3,10 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const userSchema = new Schema({
+    username: {
+        type: String,
+        required: true,
+    },
     firstName: {
         type: String,
         required: true,
@@ -24,8 +28,18 @@ const userSchema = new Schema({
         required: true,
     },
     disclaimer: {
-        type: Object,
-        required: true
+        accepted: {
+            type: Boolean,
+            default: false,
+        },
+        acceptedDate: {
+            type: Date,
+            default: null
+        }
+    },
+    emailNotifications: {
+        type: Boolean,
+        default: true
     },
     permissions: Object,
     refreshToken: String,

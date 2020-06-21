@@ -4,7 +4,7 @@ const Log = require('../../../models/log');
 
 const { v1: uuid } = require('uuid');
 
-router.get('/', async (req, res) => {
+const view = async (req, res) => {
 	console.log(req.query.id, req.jwt)
 	try {
 		const post = await Post.find({ uuid: req.query.id });
@@ -33,6 +33,6 @@ router.get('/', async (req, res) => {
 			code: "NOPOST",
 		})
 	}
-})
+};
 
-module.exports = router;
+module.exports = view;

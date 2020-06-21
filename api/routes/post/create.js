@@ -8,7 +8,7 @@ router.get('/', (req, res) => {
     res.send('create post route');
 })
 
-router.post('/', async (req, res) => {
+const create = async (req, res) => {
     console.log(req.jwt, req.body);
 
     const { error } = postValidation.validate(req.body);
@@ -66,6 +66,6 @@ router.post('/', async (req, res) => {
     res.status(201).json({
         message: 'post created!'
     });
-})
+};
 
-module.exports = router;
+module.exports = create;

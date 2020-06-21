@@ -4,7 +4,7 @@ const Log = require('../../../models/log');
 
 const { v1: uuid } = require('uuid');
 
-router.get('/', async (req, res) => {
+const list = async (req, res) => {
 	const { skip, sort, itemsPerPage, search, filterState, filterRegion, filterCategory } = req.query;
 	const defaultSearch = (skip === '0' && sort === 'descending' && itemsPerPage === '25' && !search && !filterState && !filterRegion && !filterCategory);
 
@@ -24,12 +24,10 @@ router.get('/', async (req, res) => {
 		match["$or"] = orQuery;
 	})
 
-	console.log(match);
-
 	const aggregate = [];
 	aggregate.push({ "$match": match });
+	aggregate.push({ $sort: { createdAt: -1 } });
 	if (defaultSearch) aggregate.push({ $limit: 25 })
-	aggregate.push({ $sort: { "createdAt": 1 } });
 
 	try {
 		const posts = await Post.aggregate(aggregate);
@@ -53,6 +51,6 @@ router.get('/', async (req, res) => {
 			code: "NOPOSTS",
 		})
 	}
-})
+};
 
-module.exports = router;
+module.exports = list;

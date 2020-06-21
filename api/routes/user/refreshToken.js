@@ -1,11 +1,12 @@
-const router = require('express').Router();
 const User = require('../../../models/user');
 const jwt = require('jsonwebtoken')
 const createTokens = require('../../../scripts/createTokens');
 
 const { REFRESH_TOKEN_SECRET } = process.env;
 
-router.post('/', async (req, res) => {
+const refreshToken = async (req, res) => {
+
+    console.log('refreshing token')
 
     // is there a refreshToken?
     const checkToken = req.body.token;
@@ -19,8 +20,21 @@ router.post('/', async (req, res) => {
         const userObject = await User.findOne({ uuid: decodedToken.uuid });
         if (checkToken !== userObject.refreshToken) return res.sendStatus(403);
 
-        // refreshToken verified, pare down the data
-        userData = { _id: userObject._id, firstName: userObject.firstName, lastName: userObject.lastName, email: userObject.email, phone: userObject.phone };
+        const {
+            firstName,
+            lastName,
+            email,
+            phone,
+            emailNotifications
+        } = userObject;
+
+        const userData = {
+            firstName,
+            lastName,
+            email,
+            phone,
+            emailNotifications
+        }
 
         // prep data to be included in new tokens
         // console.log(user);
@@ -59,6 +73,6 @@ router.post('/', async (req, res) => {
             code: 'RTERROR'
         })
     }
-})
+};
 
-module.exports = router;
+module.exports = refreshToken;

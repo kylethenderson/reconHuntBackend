@@ -1,12 +1,39 @@
 const router = require('express').Router();
 
-// import routes
-const userRoute = require('./routes/user/index')
-const postRoute = require('./routes/post/index')
-const dataRoute = require('./routes/data/index')
+// middleware
+const verifyToken = require('../scripts/verifyToken');
 
-router.use('/user', userRoute);
-router.use('/post', postRoute);
-router.use('/data', dataRoute)
+// import routes
+const user = require('./routes/user');
+const post = require('./routes/post');
+const data = require('./routes/data');
+const docs = require('./routes/docs');
+
+// user routes
+router.post('/login', user.login)
+router.post('/logout', verifyToken, user.logout)
+router.post('/register', user.register)
+router.post('/resetPassword', user.resetPassword)
+router.post('/refreshToken', user.refreshToken)
+router.put('/settings', verifyToken, user.updateSettings)
+
+// post routes
+router.post('/create', verifyToken, post.create);
+router.get('/list', verifyToken, post.list);
+router.get('/view', verifyToken, post.view);
+
+// data routes
+router.get('/data', verifyToken, data.getCategories)
+
+// document routes
+// define storage
+const multer = require('multer');
+const storage = multer.memoryStorage();
+
+// initialize upload
+const upload = multer({ storage });
+
+
+router.post('/docs/create', upload.single('file'), docs.create)
 
 module.exports = router;

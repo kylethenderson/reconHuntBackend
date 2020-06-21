@@ -1,4 +1,3 @@
-const router = require('express').Router();
 const { v1: uuidv1 } = require('uuid');
 const bcrypt = require('bcryptjs');
 
@@ -8,30 +7,26 @@ const UserAuth = require('../../../models/auth');
 
 const { registrationValidation, userValidation, authValidation } = require('../../../scripts/validations');
 
-// routes
-router.get('/', (req, res) => {
-    res.status(200).json('register route')
-});
-
 // register route - creates documents in auth collection and user collection
-router.post('/', async (req, res) => {
+const register = async (req, res) => {
     const { body } = req;
     const { error: bodyError } = registrationValidation.validate(body);
-    if (bodyError) return res.status(400).send({
-        message: bodyError.details[0].message
-    })
+    if (bodyError) {
+        return res.status(400).send({
+            message: bodyError.details[0].message
+        })
+    }
 
     try {
-
         // ensure username isn't already used
-        const usernameExists = await UserAuth.findOne({ username: body.username })
+        const usernameExists = await User.findOne({ username: body.username })
         if (usernameExists) return res.status(409).send({
             message: 'Username unavailable',
             code: 'USEREXISTS',
         })
 
         //ensure email isn't already used
-        const emailExists = User.findOne({ email: body.email })
+        const emailExists = await User.findOne({ email: body.email })
         if (emailExists) return res.status(409).send({
             message: 'Email in use',
             code: 'EMAILEXISTS',
@@ -46,7 +41,6 @@ router.post('/', async (req, res) => {
 
         // create auth object to save
         const userAuth = {
-            username: body.username,
             password: hashedPassword,
             uuid,
         };
@@ -57,15 +51,18 @@ router.post('/', async (req, res) => {
             message: authError.details[0].message
         });
 
-        // save auth object into auth collection
-        await UserAuth.create(userAuth);
-
         // create user object to save
         const user = {
+            username: body.username,
             firstName: body.firstName,
             lastName: body.lastName,
             email: body.email,
             phone: body.phone && body.phone,
+            disclaimer: {
+                accepted: true,
+                acceptedDate: new Date()
+            },
+            emailNotifications: true,
             uuid,
         };
 
@@ -75,7 +72,8 @@ router.post('/', async (req, res) => {
             message: userError.details[0].message
         });
 
-        // save new user object
+        // save auth and user objects
+        await UserAuth.create(userAuth);
         await User.create(user);
 
         return res.status(201).send({
@@ -89,6 +87,6 @@ router.post('/', async (req, res) => {
         })
     }
 
-})
+};
 
-module.exports = router;
+module.exports = register;

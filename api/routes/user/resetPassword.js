@@ -1,7 +1,5 @@
-const router = require('express').Router();
+const resetPassword = async (req, res) => {
+    res.sendStatus(200)
+};
 
-router.get('/', (req, res) => {
-    res.status(200).json('reset password route')
-})
-
-module.exports = router;
+module.exports = resetPassword;
