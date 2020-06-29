@@ -10,11 +10,15 @@ const postSchema = new Schema({
 	description: String,
 	available: Object,
 	createdBy: String,
-	category: Object,
+	category: Array,
 	uuid: String,
 	price: String,
 	huntableAcres: String,
-	documents: Array
+	images: Array,
+	active: {
+		type: Boolean,
+		default: true
+	}
 }, { timestamps: true });
 
 module.exports = mongoose.model('post', postSchema);

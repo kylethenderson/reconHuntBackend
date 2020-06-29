@@ -3,37 +3,35 @@ const router = require('express').Router();
 // middleware
 const verifyToken = require('../scripts/verifyToken');
 
-// import routes
+router.get('/', (req, res) => {
+	return res.status(200).json({
+		code: 'ALLGOOD',
+		message: 'Server is up and running',
+	})
+})
+
+// import functions for routes
 const user = require('./routes/user');
 const post = require('./routes/post');
 const data = require('./routes/data');
-const docs = require('./routes/docs');
 
 // user routes
-router.post('/login', user.login)
-router.post('/logout', verifyToken, user.logout)
-router.post('/register', user.register)
-router.post('/resetPassword', user.resetPassword)
-router.post('/refreshToken', user.refreshToken)
-router.put('/settings', verifyToken, user.updateSettings)
+router.post('/user/login', user.login)
+router.post('/user/logout', verifyToken, user.logout)
+router.post('/user/register', user.register)
+router.post('/user/resetPassword', user.resetPassword)
+router.post('/user/refreshToken', user.refreshToken)
+router.put('/user/settings', verifyToken, user.updateSettings)
+
+// upload file middleware
+const upload = require('../scripts/uploadImages')
 
 // post routes
-router.post('/create', verifyToken, post.create);
-router.get('/list', verifyToken, post.list);
-router.get('/view', verifyToken, post.view);
+router.post('/post/create', verifyToken, upload.array('image', 6), post.create);
+router.get('/post/list', verifyToken, post.list);
+router.get('/post/view', verifyToken, post.view);
 
 // data routes
 router.get('/data', verifyToken, data.getCategories)
-
-// document routes
-// define storage
-const multer = require('multer');
-const storage = multer.memoryStorage();
-
-// initialize upload
-const upload = multer({ storage });
-
-
-router.post('/docs/create', upload.single('file'), docs.create)
 
 module.exports = router;

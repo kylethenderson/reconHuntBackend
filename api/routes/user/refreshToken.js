@@ -14,9 +14,10 @@ const refreshToken = async (req, res) => {
 
     try {
         // decode the token
-        const decodedToken = jwt.verify(checkToken, REFRESH_TOKEN_SECRET);
+        const decodedToken = jwt.decode(checkToken);
 
         // does the user in the token exist?
+        // and does it match the last token we saved?
         const userObject = await User.findOne({ uuid: decodedToken.uuid });
         if (checkToken !== userObject.refreshToken) return res.sendStatus(403);
 

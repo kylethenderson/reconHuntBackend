@@ -1,4 +1,3 @@
-const router = require('express').Router();
 const Post = require('../../../models/post');
 const Log = require('../../../models/log');
 

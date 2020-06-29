@@ -4,14 +4,12 @@ const Post = require('../../../models/post');
 const Category = require('../../../models/category')
 const { postValidation } = require('../../../scripts/validations');
 
-router.get('/', (req, res) => {
-    res.send('create post route');
-})
 
 const create = async (req, res) => {
-    console.log(req.jwt, req.body);
+    const body = JSON.parse(req.body.data);
+    console.log(body);
 
-    const { error } = postValidation.validate(req.body);
+    const { error } = postValidation.validate(body);
     if (error) {
         console.log('validation error', error);
         return res.status(400).json({
@@ -21,37 +19,47 @@ const create = async (req, res) => {
     const uuid = uuidv1();
     try {
 
-        const dbCategories = await Category.find({}, { "_id": 0, "name": 0, "invalid": 0 });
-        const categories = dbCategories.map(c => c.category)
 
         const newPost = {
             uuid,
-            city: req.body.city,
-            state: req.body.state,
-            region: req.body.region,
-            title: req.body.title,
-            description: req.body.description,
-            available: req.body.available,
-            category: {
-                deer: {
-                    methods: req.body.deerMethods
-                },
-                upland: {},
-                turkey: {},
-                varmint: {},
-                waterFowl: {},
-                fish: {},
-                guidedHunt: {},
-            },
-            price: req.body.price,
-            huntableAcres: req.body.huntableAcres,
+            city: body.city,
+            state: body.state,
+            region: body.region,
+            title: body.title,
+            description: body.description,
+            available: body.available,
+            category: [],
+            price: body.price,
+            huntableAcres: body.huntableAcres,
+            images: [],
             createdBy: req.jwt.uuid
         }
 
-        categories.forEach(category => {
-            if (req.body.category.includes(category)) newPost.category[category].allowed = true;
-            else newPost.category[category].allowed = false;
+        const categories = body.category.map(item => {
+            const obj = {
+                name: item
+            };
+            if (item === 'deer') {
+                obj.methods = body.deerMethods;
+            }
+            return obj;
         })
+
+        newPost.category = categories;
+
+        // const dbCategories = await Category.find({}, { "_id": 0, "name": 0, "invalid": 0 });
+        // const categories = dbCategories.map(c => c.category)
+        // categories.forEach(category => {
+        //     if (body.category.includes(category)) newPost.category[category].allowed = true;
+        //     else newPost.category[category].allowed = false;
+        // })
+
+        req.files.forEach(file => {
+            newPost.images.push({
+                uuid: file.filename,
+                path: file.path
+            })
+        });
 
         await Post.create(newPost)
 

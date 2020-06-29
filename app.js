@@ -22,8 +22,8 @@ const apiRouter = require('./api/index')
 // //////////////////////
 // GENERAL MIDDLEWARE ///
 // //////////////////////
-
-app.use(express.json());
+app.use(express.urlencoded({ limit: '25mb', extended: true }))
+app.use(express.json({ limit: '25mb' }));
 
 // CORS
 app.use((req, res, next) => {
@@ -48,6 +48,25 @@ app.use((req, res, next) => {
 // //////////
 
 app.use('/api', apiRouter);
+
+// //////////////
+// Error Handling
+// //////////////
+
+app.use((error, req, res, next) => {
+    if (error.code === 'FILE_TYPE') {
+        return res.status(400).json({
+            message: 'Only images are allowed.',
+            code: 'ONLY_IMAGES'
+        })
+    }
+    if (error.code === 'LIMIT_FILE_SIZE') {
+        return res.status(400).json({
+            message: `File size too large. Max size is ${200000 / 1000}Kb`,
+            code: 'MAX_SIZE'
+        })
+    }
+})
 
 const { createPosts } = require('./scripts/createDummyData');
 
