@@ -25,6 +25,8 @@ const apiRouter = require('./api/index')
 app.use(express.urlencoded({ limit: '25mb', extended: true }))
 app.use(express.json({ limit: '25mb' }));
 
+app.use(express.static(__dirname + '/public'));
+
 // CORS
 app.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*');

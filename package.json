@@ -4,6 +4,10 @@
   "description": "Backend server for recon hunt project",
   "type": "module",
   "main": "app.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kylethenderson/reconHuntBackend.git"
+  },
   "scripts": {
     "start": "nodemon app.js"
   },
@@ -12,18 +16,15 @@
   "dependencies": {
     "@hapi/joi": "^17.1.0",
     "bcryptjs": "^2.4.3",
-    "crypto": "^1.0.1",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "fs": "0.0.1-security",
-    "fsxtra": "0.0.4",
-    "gridfs-stream": "^1.1.1",
+    "gm": "^1.23.1",
     "jsonwebtoken": "^8.5.1",
     "moment": "^2.24.0",
     "mongoose": "^5.9.2",
     "multer": "^1.4.2",
-    "multer-gridfs-storage": "^4.2.0",
-    "path": "^0.12.7",
+    "nodemailer": "^6.4.10",
     "uuid": "^3.3.3"
   }
 }

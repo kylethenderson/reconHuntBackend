@@ -50,7 +50,7 @@ const updateSettings = async (req, res, next) => {
 			firstName: firstName.toLowerCase(),
 			lastName: lastName.toLowerCase(),
 			email: email.toLowerCase(),
-			phone: phone,
+			phone,
 			emailNotifications
 		});
 

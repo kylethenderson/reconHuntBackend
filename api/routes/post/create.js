@@ -1,8 +1,7 @@
-const router = require('express').Router();
 const { v1: uuidv1 } = require('uuid');
 const Post = require('../../../models/post');
-const Category = require('../../../models/category')
 const { postValidation } = require('../../../scripts/validations');
+const gm = require('gm');
 
 
 const create = async (req, res) => {
@@ -28,24 +27,25 @@ const create = async (req, res) => {
             title: body.title,
             description: body.description,
             available: body.available,
-            category: [],
+            category: {},
             price: body.price,
             huntableAcres: body.huntableAcres,
             images: [],
             createdBy: req.jwt.uuid
         }
 
-        const categories = body.category.map(item => {
-            const obj = {
-                name: item
-            };
-            if (item === 'deer') {
-                obj.methods = body.deerMethods;
+        body.category.forEach(item => {
+            console.log(item);
+            newPost.category[item] = {
+                allowed: true,
             }
-            return obj;
+            if (item === 'deer') {
+                newPost.category.deer.hasOptions = true;
+                newPost.category.deer.options = {
+                    hunting_methods: body.deerMethods
+                };
+            }
         })
-
-        newPost.category = categories;
 
         // const dbCategories = await Category.find({}, { "_id": 0, "name": 0, "invalid": 0 });
         // const categories = dbCategories.map(c => c.category)
@@ -55,9 +55,20 @@ const create = async (req, res) => {
         // })
 
         req.files.forEach(file => {
+            const relPath = process.cwd()
+            const newFilename = `thumbnail_${file.filename}`
+            gm(`${relPath}/${file.path}`)
+                .resize(100)
+                .noProfile()
+                .write(`${relPath}/public/images/${newFilename}`, error => {
+                    if (error) {
+                        console.log(error);
+                        throw new Error(error);
+                    };
+                });
+
             newPost.images.push({
-                uuid: file.filename,
-                path: file.path
+                filename: file.filename,
             })
         });
 

@@ -6,6 +6,7 @@ const registrationValidation = joi.object({
     username: joi.string().required(),
     email: joi.string().required().email(),
     phone: joi.string().required(),
+    zip: joi.string().required(),
     password: joi.string().required(),
 });
 
@@ -48,4 +49,11 @@ const postValidation = joi.object({
     deerMethods: joi.array(),
 })
 
-module.exports = { registrationValidation, authValidation, userValidation, loginValidation, postValidation };
+const contactValidation = joi.object({
+    postId: joi.string().required(),
+    email: joi.string().required(),
+    message: joi.string().required(),
+    name: joi.string().required(),
+})
+
+module.exports = { registrationValidation, authValidation, userValidation, loginValidation, postValidation, contactValidation };

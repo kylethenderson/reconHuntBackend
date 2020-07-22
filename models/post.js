@@ -10,7 +10,7 @@ const postSchema = new Schema({
 	description: String,
 	available: Object,
 	createdBy: String,
-	category: Array,
+	category: Object,
 	uuid: String,
 	price: String,
 	huntableAcres: String,

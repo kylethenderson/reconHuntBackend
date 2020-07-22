@@ -23,6 +23,10 @@ const userSchema = new Schema({
         type: String,
         required: true,
     },
+    zip: {
+        type: String,
+        required: true,
+    },
     uuid: {
         type: String,
         required: true,

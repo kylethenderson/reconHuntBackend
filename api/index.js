@@ -1,4 +1,5 @@
-const router = require('express').Router();
+const express = require('express')
+const router = express.Router();
 
 // middleware
 const verifyToken = require('../scripts/verifyToken');
@@ -30,6 +31,7 @@ const upload = require('../scripts/uploadImages')
 router.post('/post/create', verifyToken, upload.array('image', 6), post.create);
 router.get('/post/list', verifyToken, post.list);
 router.get('/post/view', verifyToken, post.view);
+router.post('/post/contact', verifyToken, post.contact);
 
 // data routes
 router.get('/data', verifyToken, data.getCategories)

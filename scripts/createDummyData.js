@@ -19,30 +19,21 @@ const createPosts = async () => {
 				from: 'Sat Mar 21 2020 17:28:53 GMT-0700',
 				to: 'Sat Mar 28 2020 17:28:53 GMT-0700'
 			},
-			category: [
-				{
-					name: 'deer',
-					methods: ['bow', 'rifle']
+			category: {
+				deer: {
+					allowed: true,
+					hasOptions: true,
+					options: {
+						hunting_methods: ['bow', 'rifle']
+					}
 				},
-				{
-					name: 'upland',
+				upland: {
+					allowed: true,
 				},
-				{
-					name: 'turkey',
-				},
-				{
-					name: 'varmint',
-				},
-				{
-					name: 'waterFowl',
-				},
-				{
-					name: 'fish',
-				},
-				{
-					name: 'guidedHunt',
+				turkey: {
+					allowed: true
 				}
-			],
+			},
 			acive: true,
 			createdBy: 'username',
 			createdOn: '3/15/2020',
