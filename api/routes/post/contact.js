@@ -1,7 +1,12 @@
 // whatever imports you need
 const { contactValidation } = require('../../../scripts/validations');
 const Log = require('../../../models/log');
-const { v1: uuid } = require('uuid')
+const Post = require('../../../models/post');
+const User = require('../../../models/user');
+const { v1: uuid } = require('uuid');
+const nodemailer = require('nodemailer');
+
+const fromAddress = 'recon.hunt.test@gmail.com'
 
 const contact = async (req, res, next) => {
 	const { body } = req;
@@ -13,11 +18,65 @@ const contact = async (req, res, next) => {
 		code: 'EMAIL_ERROR'
 	})
 
+	// get the post so we can get the user from it
+	const { postId } = body;
+	const post = await Post.findOne(
+		{ uuid: postId },
+		{ createdBy: 1, city: 1, state: 1, _id: 0 }
+	);
+	if (!post) return res.status(500).json({
+		code: 'NOPOST',
+		message: 'Unable to find post.'
+	})
+	const { createdBy: userUuid, city, state } = post;
+
+	const formattedCity = city.charAt(0).toUpperCase() + city.slice(1);
+
+	// get the user info to contact
+	const user = await User.findOne(
+		{ uuid: userUuid },
+		{ email: 1, username: 1 }
+	);
+
+	if (!user) return res.status(500).json({
+		code: 'NOUSER',
+		message: 'Unable to find user.'
+	});
+
+	const { email, username } = user;
+
+	const formattedName = username.charAt(0).toUpperCase() + username.slice(1);
+
+	// create the object to email
+	const mailOptions = {
+		from: `"Recon Hunt" <${fromAddress}>`,
+		to: email,
+		subject: `Message from Recon Hunt`,
+		html: `
+			<h3>${req.jwt.user.firstName},</h3>
+			<p>${formattedName} is interested in your ${formattedCity}, ${state} property.</p>
+			<p>Continue the conversation by contacting them at ${body.email}.</p>
+			<br />
+			<h4>Thanks,</h4>
+			<p>Your friends at Recon Hunt</p>
+		`,
+	};
+
 	try {
 		//
+		// create reusable transporter object using the default SMTP transport
+		const transporter = nodemailer.createTransport({
+			host: 'smtp.gmail.com',
+			port: 587,
+			secure: false,
+			auth: {
+				user: fromAddress,
+				pass: 'reconHunt123'
+			}
+		});
 
-		// we need to send the email.
-
+		// send mail with defined transport object
+		await transporter.sendMail(mailOptions);
 
 		// then make a log of the event
 		const log = {
@@ -32,22 +91,14 @@ const contact = async (req, res, next) => {
 			uuid: uuid(),
 		}
 
-		await Log.create(log);
+		// await Log.create(log);
 
 		// then we can send the all good
-		res.sendStatus(200);
+		res.status(200).json({ username });
 	}
 	catch (error) {
 		console.log(error);
 	}
-	finally {
-		//
-	}
-
-
-
-
-
 
 }
 

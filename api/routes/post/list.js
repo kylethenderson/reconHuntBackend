@@ -38,7 +38,6 @@ const list = async (req, res) => {
 
 	try {
 		const total = await Post.count(query);
-		console.log(total)
 		const posts = await Post.aggregate(aggregate);
 
 		// log the search event if its not just the default
