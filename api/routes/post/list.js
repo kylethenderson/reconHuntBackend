@@ -37,7 +37,7 @@ const list = async (req, res) => {
 	aggregate.push({ $skip: Number(skip * limit) })
 
 	try {
-		const total = await Post.count(query);
+		const total = await Post.countDocuments(query);
 		const posts = await Post.aggregate(aggregate);
 
 		// log the search event if its not just the default

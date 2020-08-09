@@ -5,12 +5,12 @@ const Post = require('../../../models/post');
 const User = require('../../../models/user');
 const { v1: uuid } = require('uuid');
 const nodemailer = require('nodemailer');
+const sendMail = require('../../../scripts/sendMail');
 
 const fromAddress = 'recon.hunt.test@gmail.com'
 
 const contact = async (req, res, next) => {
 	const { body } = req;
-	console.log(req.jwt);
 	// validate the body
 	const { error } = contactValidation.validate(body);
 	if (error) return res.status(500).json({
@@ -48,8 +48,8 @@ const contact = async (req, res, next) => {
 	const formattedName = username.charAt(0).toUpperCase() + username.slice(1);
 
 	// create the object to email
+	// 
 	const mailOptions = {
-		from: `"Recon Hunt" <${fromAddress}>`,
 		to: email,
 		subject: `Message from Recon Hunt`,
 		html: `
@@ -63,24 +63,11 @@ const contact = async (req, res, next) => {
 	};
 
 	try {
-		//
-		// create reusable transporter object using the default SMTP transport
-		const transporter = nodemailer.createTransport({
-			host: 'smtp.gmail.com',
-			port: 587,
-			secure: false,
-			auth: {
-				user: fromAddress,
-				pass: 'reconHunt123'
-			}
-		});
-
-		// send mail with defined transport object
-		await transporter.sendMail(mailOptions);
+		await sendMail(mailOptions);
 
 		// then make a log of the event
 		const log = {
-			event: 'contact',
+			event: 'post_contact',
 			data: {
 				userUuid: req.jwt.uuid,
 				userName: body.name,
@@ -91,7 +78,7 @@ const contact = async (req, res, next) => {
 			uuid: uuid(),
 		}
 
-		// await Log.create(log);
+		await Log.create(log);
 
 		// then we can send the all good
 		res.status(200).json({ username });

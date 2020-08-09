@@ -17,12 +17,13 @@ const post = require('./routes/post');
 const data = require('./routes/data');
 
 // user routes
-router.post('/user/login', user.login)
-router.post('/user/logout', verifyToken, user.logout)
-router.post('/user/register', user.register)
-router.post('/user/resetPassword', user.resetPassword)
-router.post('/user/refreshToken', user.refreshToken)
-router.put('/user/settings', verifyToken, user.updateSettings)
+router.post('/user/login', user.login);
+router.post('/user/logout', verifyToken, user.logout);
+router.post('/user/register', user.register);
+router.post('/user/resetPassword', user.resetPassword);
+router.post('/user/refreshToken', user.refreshToken);
+router.put('/user/settings', verifyToken, user.updateSettings);
+router.post('/user/contact', verifyToken, user.contact);
 
 // upload file middleware
 const upload = require('../scripts/uploadImages')
