@@ -1,6 +1,6 @@
 const mailer = require('nodemailer');
 
-const { user, pass } = process.env.emailSettings;
+const { user, pass } = process.env.EMAIL_SETTINGS;
 
 const sendMail = async (options) => {
 	const { to, subject, html } = options;
