@@ -19,10 +19,7 @@ const sendMail = async (options) => {
 			host: 'smtp.gmail.com',
 			port: 587,
 			secure: false,
-			auth: {
-				user,
-				pass
-			}
+			auth: { user, pass }
 		});
 
 		// send mail with defined transport object
