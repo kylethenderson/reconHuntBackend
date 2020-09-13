@@ -20,6 +20,13 @@ const updateSettings = async (req, res, next) => {
 			newPassword,
 		} = validatedBody;
 
+		// if email is included, ensure its not in use by anyone else
+		const currentUserData = await User.findOne({ uuid: jwt.uuid });
+		if (currentUserData.email !== email ) {
+			const emailInUse = await User.findOne({ email });
+			if ( !!emailInUse ) return res.status(409).json({message: 'Email in use', code: 'EMAILINUSE', userData: currentUserData})
+		}
+
 		// if user wants to update password, verify and update the auth object first;
 		// don't want any other data updated if password is bad
 		if (password && newPassword) {

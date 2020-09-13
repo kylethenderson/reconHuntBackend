@@ -8,6 +8,7 @@ const registrationValidation = joi.object({
     phone: joi.string().required(),
     zip: joi.string().required(),
     password: joi.string().required(),
+    accepted: joi.boolean().required(),
 });
 
 const authValidation = joi.object({
@@ -22,6 +23,7 @@ const userValidation = joi.object({
     email: joi.string().required().email(),
     phone: joi.string().required(),
     disclaimer: joi.object().required(),
+    zip: joi.string().required(),
     emailNotifications: joi.boolean().required(),
     uuid: joi.string().required(),
 });

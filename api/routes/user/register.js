@@ -17,6 +17,8 @@ const register = async (req, res) => {
         })
     }
 
+    console.log(body);
+
     try {
         // ensure username isn't already used
         const usernameExists = await User.findOne({ username: body.username })
@@ -58,9 +60,10 @@ const register = async (req, res) => {
             lastName: body.lastName,
             email: body.email,
             phone: body.phone && body.phone,
+            zip: body.zip,
             disclaimer: {
-                accepted: true,
-                acceptedDate: new Date()
+                accepted: body.accepted,
+                acceptedDate: body.accepted ? new Date() : null
             },
             emailNotifications: true,
             uuid,
