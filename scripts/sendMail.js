@@ -1,6 +1,6 @@
 const mailer = require('nodemailer');
 
-const fromAddress = 'recon.hunt.test@gmail.com'
+const { user, pass } = process.env.emailSettings;
 
 const sendMail = async (options) => {
 	const { to, subject, html } = options;
@@ -20,8 +20,8 @@ const sendMail = async (options) => {
 			port: 587,
 			secure: false,
 			auth: {
-				user: fromAddress,
-				pass: 'reconHunt123'
+				user,
+				pass
 			}
 		});
 
