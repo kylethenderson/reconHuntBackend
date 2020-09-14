@@ -44,6 +44,8 @@ const refreshToken = async (req, res) => {
             user: userData,
             username: userObject.username,
         }
+
+        // create the tokens. takes data and and expiry(optional)
         const { token, refreshToken } = createTokens(tokenData);
 
         // update user object with new refreshToken
@@ -51,7 +53,7 @@ const refreshToken = async (req, res) => {
             { uuid: userObject.uuid },
             {
                 refreshToken,
-                lastLogin: new Date()
+                lastActive: new Date()
             }
         );
 
