@@ -17,7 +17,7 @@ const MAX_SIZE = 3000000;
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, 'opt/frontend/public/images/')
+        cb(null, '/opt/frontend/public/images/')
     },
     filename: (req, file, cb) => {
         const fileType = file.mimetype.split('/')[1];
