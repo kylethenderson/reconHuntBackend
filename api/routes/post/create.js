@@ -55,12 +55,11 @@ const create = async (req, res) => {
         // })
 
         req.files.forEach(file => {
-            const relPath = process.cwd()
             const newFilename = `thumbnail_${file.filename}`
-            gm(`${relPath}/${file.path}`)
+            gm(`${file.path}`)
                 .resize(100)
                 .noProfile()
-                .write(`${relPath}/public/images/${newFilename}`, error => {
+                .write(`/opt/frontend/public/images/${newFilename}`, error => {
                     if (error) {
                         console.log(error);
                         throw new Error(error);
