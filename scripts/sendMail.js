@@ -28,6 +28,8 @@ const sendMail = async (options) => {
 			}
 		});
 
+		console.log(mailOptions);
+
 		// send mail with defined transport object
 		await transporter.sendMail(mailOptions);
 	} catch (error) {
