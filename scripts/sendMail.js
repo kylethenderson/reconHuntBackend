@@ -2,6 +2,8 @@ const mailer = require('nodemailer');
 
 const { user, pass } = process.env.EMAIL_SETTINGS;
 
+console.log(user, pass);
+
 const sendMail = async (options) => {
 	const { to, subject, html } = options;
 
@@ -27,8 +29,6 @@ const sendMail = async (options) => {
 				rejectUnauthorized: false
 			}
 		});
-
-		console.log(mailOptions);
 
 		// send mail with defined transport object
 		await transporter.sendMail(mailOptions);
