@@ -18,9 +18,9 @@ const sendMail = async (options) => {
 		//
 		// create reusable transporter object using the default SMTP transport
 		const transporter = mailer.createTransport({
-			host: 'smtp.gmail.com',
-			port: 587,
-			secure: false,
+			host: 'email-smtp.us-east-2.amazonaws.com',
+			port: 465,
+			secure: true,
 			auth: { user, pass }
 		});
 
