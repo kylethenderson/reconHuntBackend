@@ -3,7 +3,9 @@ const mailer = require('nodemailer');
 const { user, pass } = process.env.EMAIL_SETTINGS;
 
 const sendMail = async (options) => {
-	const { to, subject, html } = options;
+	const { to, from, subject, html } = options;
+
+	fromAddress = from || process.env.CONTACT_EMAIL;
 
 	const mailOptions = {
 		from: `"Recon Hunt" <${fromAddress}>`,

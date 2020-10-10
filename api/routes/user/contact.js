@@ -28,6 +28,7 @@ const contact = async (req, res, next) => {
 
 	const mailOptions = {
 		to: contactEmail,
+		from: req.jwt.user.email,
 		subject: 'New Contact Email',
 		html: `
 			<p>${body.message}</p>
