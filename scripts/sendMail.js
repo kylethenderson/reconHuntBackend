@@ -21,7 +21,11 @@ const sendMail = async (options) => {
 			host: 'email-smtp.us-east-2.amazonaws.com',
 			port: 465,
 			secure: true,
-			auth: { user, pass }
+			auth: { user, pass },
+			tls: {
+				// do not fail on invalid certs
+				rejectUnauthorized: false
+			}
 		});
 
 		// send mail with defined transport object
