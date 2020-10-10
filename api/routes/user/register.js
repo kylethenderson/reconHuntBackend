@@ -17,8 +17,6 @@ const register = async (req, res) => {
         })
     }
 
-    console.log(body);
-
     try {
         // ensure username isn't already used
         const usernameExists = await User.findOne({ username: body.username })

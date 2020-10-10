@@ -6,7 +6,6 @@ const sendMail = async (options) => {
 	const { to, subject, html } = options;
 
 	fromAddress = process.env.CONTACT_EMAIL;
-	console.log(user, pass, fromAddress);
 
 	const mailOptions = {
 		from: `"Recon Hunt" <${fromAddress}>`,

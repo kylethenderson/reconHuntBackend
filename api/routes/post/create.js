@@ -6,7 +6,6 @@ const gm = require('gm');
 
 const create = async (req, res) => {
     const body = JSON.parse(req.body.data);
-    console.log(body);
 
     const { error } = postValidation.validate(body);
     if (error) {
@@ -35,7 +34,6 @@ const create = async (req, res) => {
         }
 
         body.category.forEach(item => {
-            console.log(item);
             newPost.category[item] = {
                 allowed: true,
             }

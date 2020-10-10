@@ -13,13 +13,7 @@ const contactValidation = joi.object({
 const contact = async (req, res, next) => {
 	const { body } = req;
 	const { user } = req.jwt
-
-	console.log('the body is')
-	console.log(body)
-	console.log('the jwt is')
-	console.log(req.jwt)
-
-
+	
 	const { error } = contactValidation.validate(body);
 	if (error) return res.status(400).json({
 		message: 'Error with body',

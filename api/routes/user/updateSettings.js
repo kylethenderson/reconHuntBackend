@@ -4,8 +4,6 @@ const UserAuth = require('../../../models/auth')
 const bcrypt = require('bcryptjs')
 
 const updateSettings = async (req, res, next) => {
-	console.log('updating user data', req.body, req.jwt);
-
 	// validate body with joi
 	const { body: validatedBody, jwt } = req;
 
