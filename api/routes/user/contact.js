@@ -1,4 +1,3 @@
-require('dotenv').config();
 const Log = require('../../../models/log');
 const joi = require('@hapi/joi');
 const sendMail = require('../../../scripts/sendMail')

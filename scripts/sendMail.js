@@ -1,8 +1,6 @@
 const mailer = require('nodemailer');
-require('dotenv').config();
-
-const { user, pass } = process.env.EMAIL_SETTINGS;
-
+const user = process.env.EMAIL_USER
+const pass = process.env.EMAIL_PASS;
 
 const sendMail = async (options) => {
 	const { to, subject, html } = options;
