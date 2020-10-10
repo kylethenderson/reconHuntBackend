@@ -1,4 +1,5 @@
 const mailer = require('nodemailer');
+require('dotenv').config();
 
 const { user, pass } = process.env.EMAIL_SETTINGS;
 

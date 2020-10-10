@@ -1,7 +1,8 @@
+require('dotenv').config();
 const Log = require('../../../models/log');
 const joi = require('@hapi/joi');
 const sendMail = require('../../../scripts/sendMail')
-const { v1: uuid } = require('uuid')
+const { v1: uuid } = require('uuid');
 
 const contactEmail = process.env.CONTACT_EMAIL
 
